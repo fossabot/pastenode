@@ -1,6 +1,17 @@
 html
     head
-        title 404 Not found.
+        title= title
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        link(rel='stylesheet' href='/app/node_modules/bulma/css/bulma.css')
     body
-        h1 404 Not found.
-        h2 Sad thing.
+        section.hero.is-info
+            div.hero-body
+                div.container
+                    h1.title
+                        a(href= appurl)= title
+                    h2.subtitle= description
+        section.section
+            div.container
+                h1.title 404 Not found
+                img(src="https://www.petfinder.com/wp-content/uploads/2012/11/91615172-find-a-lump-on-cats-skin-632x475.jpg")
