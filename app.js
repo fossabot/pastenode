@@ -8,21 +8,29 @@ const fs = require('fs');
 
 //config
 try {
-  var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
-  console.log(config);
-} catch (e) {
-  console.log(e);
+	var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
+	console.log(config);
+}
+catch (e) {
+	console.log(e);
 }
 
 //mongodb
 const mongodb = require('mongodb');
 var database;
 mongodb.MongoClient.connect(config['app']['database'], function(err, db) {
-  if (err) throw err;
-  database = db;
-  db.createCollection("nodepaste", function(err, res) {
-    if (err) throw err;
-  });
+	if (err) throw err;
+	database = db;
+	db.createCollection("nodepaste", function(err, res) {
+		if (err) throw err;
+	});
+});
+
+//recaptcha
+var reCAPTCHA = require('recaptcha2');
+var recaptcha = new reCAPTCHA({
+	siteKey: config['recaptcha']['site_key'],
+	secretKey: config['recaptcha']['secret_key']
 });
 
 //other things
@@ -42,66 +50,88 @@ app.locals.title = config['app']['title'];
 app.locals.subtitle = config['app']['subtitle'];
 
 //index page
-app.get('/', function (req, res) {
-  res.render('index', { new_paste: config['language']['new_paste'], add: config['language']['add']});
+app.get('/', function(req, res) {
+	res.render('index', {
+		index_new_paste: config['language']['index_new_paste'],
+		index_name: config['language']['index_name'],
+		index_syntax: config['language']['index_syntax'],
+		index_content: config['language']['index_content'],
+		index_captcha: config['language']['index_captcha'],
+		index_add: config['language']['index_add'],
+		recaptcha_site_key: config['recaptcha']['site_key']
+	});
 });
 
 //paste page
-app.get('/paste/:id', function (req, res) {
-  var query = {
-    _id: mongodb.ObjectId(req.params.id)
-  };
-  database.collection("nodepaste").findOne(query, function(err, result){
-    console.log(result);
-    if(err){
-      throw err;
-    }
-    if(result != null){
-      res.render('paste', { pasteid: result._id, pastetitle: result.name, pastecontent: result.content, pastesyntax: result.syntax});
-    }else{
-      res.render('404');
-    }
-  });
+app.get('/paste/:id', function(req, res) {
+	var query = {
+		_id: mongodb.ObjectId(req.params.id)
+	};
+	database.collection("nodepaste").findOne(query, function(err, result) {
+		console.log(result);
+		if (err) {
+			throw err;
+		}
+		if (result != null) {
+			res.render('paste', {
+				pasteid: result._id,
+				pastetitle: result.name,
+				pastecontent: result.content,
+				pastesyntax: result.syntax,
+				paste_raw: config['language']['paste_raw']
+			});
+		}
+		else {
+			res.render('404');
+		}
+	});
 });
 
 //crashes app.
-app.get('/raw/:id', function (req, res) {
-  var query = {
-    _id: mongodb.ObjectId(req.params.id)
-  };
-  database.collection("nodepaste").findOne(query, function(err, result){
-    console.log(result);
-    if(err){
-      throw err;
-    }
-    if(result != null){
-      res.send(result.content); //todo: send it as text, not html
-    }else{
-      res.render('404');
-    }
-  });
+app.get('/raw/:id', function(req, res) {
+	var query = {
+		_id: mongodb.ObjectId(req.params.id)
+	};
+	database.collection("nodepaste").findOne(query, function(err, result) {
+		console.log(result);
+		if (err) {
+			throw err;
+		}
+		if (result != null) {
+			res.send(result.content); //todo: send it as text, not html
+		}
+		else {
+			res.render('404');
+		}
+	});
 });
 
-app.post('/add', function (req, res) {
-  var paste = {
-    name: req.body.name,
-    syntax: req.body.syntax,
-    content: req.body.content
-  };
-  database.collection("nodepaste").insertOne(paste, function(err, respond){
-    if(err) throw err;
-    var id = respond.ops[0]._id;
-    console.log("Paste with id " + id + " added.");
-    res.set('Location' , config['app']['url'] + "paste/" + id );
-    res.render('newpasteredirect', {url: config['app']['url'] + "paste/" + id});
-  });
+app.post('/add', function(req, res) {
+	var paste = {
+		name: req.body.name,
+		syntax: req.body.syntax,
+		content: req.body.content
+	};
+	recaptcha.validateRequest(req).then(function() {
+			database.collection("nodepaste").insertOne(paste, function(err, respond) {
+				if (err) throw err;
+				var id = respond.ops[0]._id;
+				console.log("Paste with id " + id + " added.");
+				res.set('Location', config['app']['url'] + "paste/" + id);
+				res.render('newpasteredirect', { url: config['app']['url'] + "paste/" + id });
+			});
+		})
+		.catch(function(errorCodes) {
+			res.render('error', { error: recaptcha.translateErrors(errorCodes) });
+			//res.json({ formSubmit: false, errors: recaptcha.translateErrors(errorCodes) }); // translate error codes to human readable text
+		});
 });
 
 // 404
-app.get('*', function(req, res){
-  res.render('404');
+app.get('*', function(req, res) {
+	res.render('404');
 });
 
-app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
 
 });

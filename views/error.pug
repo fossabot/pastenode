@@ -1,0 +1,19 @@
+html
+    head
+        title= title
+        meta(charset='utf-8')
+        meta(name='viewport' content='width=device-width, initial-scale=1')
+        link(rel='stylesheet' href='/app/node_modules/bulma/css/bulma.css')
+    body
+        section.hero.is-info
+            div.hero-body
+                div.container
+                    h1.title
+                        a(href= appurl)= title
+                    h2.subtitle= subtitle
+        section.section
+            div.container
+                h1.title Computer said no.
+                h2.subtitle Huh, something went wrong.
+                pre
+                    code= error

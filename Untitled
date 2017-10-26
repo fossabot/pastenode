@@ -1,7 +1,2 @@
 baza:
-_id, nazwa, skladnia, kod usuniecia(?), kod
-
-//id 20-znakowe
-//Math.random().toString(36).substr(2, 20);
-//szansa na powtorzenie na tyle mala ze chyba weryfikacja nie ma zadnego sensu.
-albo walic to, uzywamy wbudowanych w mongodb id obietkow
+_id, nazwa, skladnia, kod

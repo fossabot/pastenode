@@ -13,18 +13,18 @@ html
                     h2.subtitle= subtitle
         section.section
             div.container.is-fluid
-                h1.title= new_paste
+                h1.title= index_new_paste
                 form(action="/add" method="post")
                     div.field.is-horizontal
                         div.field-label.is-normal
-                            label.label Name
+                            label.label= index_name
                         div.field-body
                             div.field
                                 div.control
                                     input.input(type="text" name="name")
                     div.field.is-horizontal
                         div.field-label.is-normal
-                            label.label Syntax
+                            label.label= index_syntax
                         div.field-body
                             div.field
                                 div.control
@@ -159,13 +159,20 @@ html
                                             option(value="vim") vim
                     div.field.is-horizontal
                         div.field-label.is-normal
-                            label.label Paste
+                            label.label= index_content
                         div.field-body
                             div.field
                                 div.control
                                     textarea.textarea(type="textarea" name="content")
                     div.field.is-horizontal
+                        div.field-label.is-normal
+                            label.label= index_captcha
+                        div.field-body
+                            div.field
+                                div.g-recaptcha(data-sitekey= recaptcha_site_key)
+                    div.field.is-horizontal
                         div.field-label
                         div.field-body
                             div.field
-                                button.button.is-link= add
+                                button.button.is-link= index_add
+        script(src="https://www.google.com/recaptcha/api.js")

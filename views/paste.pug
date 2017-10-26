@@ -21,8 +21,6 @@ html
                     code.line-numbers(class="language-" + pastesyntax)= pastecontent
                 br
                 a(href= appurl + "raw/" + pasteid)
-                    button.button.is-primary Raw
-                a(href="#")
-                    button.button.is-danger Delete
+                    button.button.is-primary= paste_raw
         script(src='d/app/node_modules/prismjs/prism.js')
         script(src='/app/public/js/prism.js')
