@@ -2,26 +2,22 @@
 // PasteNode - Pastebin-like service written in Node.js
 //
 
-const config = {
-  /* Main */
-  appurl: "https://pastenode-artur9010.c9users.io/", //url to your pastenode
-  title: "PasteNode v0.0.4", //title in header
-  description: "Free and Open Source pastebin alternative!", //subtitle in header
-  /* MongoDB */
-  mongourl: "" //database url in format: mongodb://username:password@host:port/database
-};
+//some node modules
+const yaml = require('js-yaml');
+const fs = require('fs');
 
-const lang = {
-  create_new_paste: "Create new paste",
-  add: "Add"
-};
-
-// Code!
+//config
+try {
+  var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
+  console.log(config);
+} catch (e) {
+  console.log(e);
+}
 
 //mongodb
-const MongoClient = require('mongodb').MongoClient;
+const mongodb = require('mongodb');
 var database;
-MongoClient.connect(config.mongourl, function(err, db) {
+mongodb.MongoClient.connect(config['app']['database'], function(err, db) {
   if (err) throw err;
   database = db;
   db.createCollection("nodepaste", function(err, res) {
@@ -41,17 +37,19 @@ app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true })); // support encoded bodies
 
 //locals
-app.locals.appurl = config.appurl;
-app.locals.title = config.title;
-app.locals.description = config.description;
+app.locals.appurl = config['app']['url'];
+app.locals.title = config['app']['title'];
+app.locals.subtitle = config['app']['subtitle'];
 
+//index page
 app.get('/', function (req, res) {
-  res.render('index', { create_new_paste: lang.create_new_paste, add: lang.add});
+  res.render('index', { new_paste: config['language']['new_paste'], add: config['language']['add']});
 });
 
+//paste page
 app.get('/paste/:id', function (req, res) {
   var query = {
-    id: req.params.id
+    _id: mongodb.ObjectId(req.params.id)
   };
   database.collection("nodepaste").findOne(query, function(err, result){
     console.log(result);
@@ -59,7 +57,7 @@ app.get('/paste/:id', function (req, res) {
       throw err;
     }
     if(result != null){
-      res.render('paste', { pasteid: result.id, pastetitle: result.name, pastecontent: result.content, pastesyntax: result.syntax});
+      res.render('paste', { pasteid: result._id, pastetitle: result.name, pastecontent: result.content, pastesyntax: result.syntax});
     }else{
       res.render('404');
     }
@@ -69,32 +67,34 @@ app.get('/paste/:id', function (req, res) {
 //crashes app.
 app.get('/raw/:id', function (req, res) {
   var query = {
-    id: req.params.id
+    _id: mongodb.ObjectId(req.params.id)
   };
   database.collection("nodepaste").findOne(query, function(err, result){
     console.log(result);
     if(err){
       throw err;
     }
-    res.writeHead(200, {'Content-Type': 'text/plain'});
-    res.send(result.content);
+    if(result != null){
+      res.send(result.content); //todo: send it as text, not html
+    }else{
+      res.render('404');
+    }
   });
 });
 
 app.post('/add', function (req, res) {
-  var randomid = Math.random().toString(36).substr(2, 20);
   var paste = {
-    id: randomid,
     name: req.body.name,
     syntax: req.body.syntax,
     content: req.body.content
   };
-  database.collection("nodepaste").insertOne(paste, function(err, res){
+  database.collection("nodepaste").insertOne(paste, function(err, respond){
     if(err) throw err;
-    console.log("Paste with id " + randomid + " added.");
+    var id = respond.ops[0]._id;
+    console.log("Paste with id " + id + " added.");
+    res.set('Location' , config['app']['url'] + "paste/" + id );
+    res.render('newpasteredirect', {url: config['app']['url'] + "paste/" + id});
   });
-  //res.send("Paste with id " + randomid + " added."); //todo: redirect to paste.
-  res.send("added, url:  " + config.appurl + "paste/" + randomid + "");
 });
 
 // 404

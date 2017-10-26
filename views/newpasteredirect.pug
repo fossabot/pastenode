@@ -1,0 +1,16 @@
+html
+    head 
+        title Redirecting...
+        link(rel='stylesheet' href='app/node_modules/bulma/css/bulma.css')
+    body
+        section.hero.is-info
+            div.hero-body
+                div.container.is-fluid
+                    h1.title
+                        a(href= appurl)= title
+                    h2.subtitle= subtitle
+        h1.title Redirecting...
+        h2.subtitle
+            a(href= url) Click here
+        script.
+            window.location.href = "!{url}"

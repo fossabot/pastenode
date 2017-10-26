@@ -4,22 +4,25 @@ html
         meta(charset='utf-8')
         meta(name='viewport' content='width=device-width, initial-scale=1')
         link(rel='stylesheet' href='/app/node_modules/bulma/css/bulma.css')
+        link(rel='stylesheet' href='/app/public/css/prism.css')
         link(rel='stylesheet' href='/app/public/css/paste.css')
+        link(rel='stylesheet' href='/app/public/css/prism-bulma-fix.css')
     body
         section.hero.is-info
             div.hero-body
-                div.container
+                div.container.is-fluid
                     h1.title
                         a(href= appurl)= title
-                    h2.subtitle= description
+                    h2.subtitle= subtitle
         section.section
-            div.container
+            div.container.is-fluid
                 h1.title= pastetitle
-                div#editor= pastecontent
-        script(src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js")
-        script.
-            window.define = ace.define;
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/chrome");
-            editor.getSession().setMode("ace/mode/!{pastesyntax}");
-            editor.setReadOnly(true);
+                pre
+                    code.line-numbers(class="language-" + pastesyntax)= pastecontent
+                br
+                a(href= appurl + "raw/" + pasteid)
+                    button.button.is-primary Raw
+                a(href="#")
+                    button.button.is-danger Delete
+        script(src='d/app/node_modules/prismjs/prism.js')
+        script(src='/app/public/js/prism.js')
