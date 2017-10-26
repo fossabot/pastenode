@@ -1,5 +1,5 @@
 app:
-    title: "PasteNode v0.1.1"
+    title: "PasteNode v0.2"
     subtitle: "Free and Open Source Paste service!"
     database: "mongodb://username:password@server:port/database"
     url: "https://artur9010.pl/"

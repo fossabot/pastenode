@@ -21,7 +21,7 @@ html
                         div.field-body
                             div.field
                                 div.control
-                                    input.input(type="text" name="name")
+                                    input.input(type="text" name="name" minlength="3" maxlength="250" required)
                     div.field.is-horizontal
                         div.field-label.is-normal
                             label.label= index_syntax
@@ -163,16 +163,20 @@ html
                         div.field-body
                             div.field
                                 div.control
-                                    textarea.textarea(type="textarea" name="content")
+                                    textarea.textarea(type="textarea" name="content" maxlength="250000" required)
                     div.field.is-horizontal
                         div.field-label.is-normal
                             label.label= index_captcha
                         div.field-body
                             div.field
-                                div.g-recaptcha(data-sitekey= recaptcha_site_key)
+                                div.g-recaptcha(data-sitekey= recaptcha_site_key data-callback="recaptcha_enable_button")
                     div.field.is-horizontal
                         div.field-label
                         div.field-body
                             div.field
-                                button.button.is-link= index_add
+                                button.button.is-link#btn(disabled)= index_add
         script(src="https://www.google.com/recaptcha/api.js")
+        script.
+            function recaptcha_enable_button(){
+                document.getElementById("btn").disabled = false;
+            }
