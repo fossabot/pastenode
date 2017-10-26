@@ -16,7 +16,7 @@
 //todo
 
 ## Where can I find a WWW host with nodejs support?
-If you are a Polish user, you can use ![http://www.mydevil.net/pp/C5MEX6HEKU](mydevil.net).
+If you are a Polish user, you can use ![mydevil.net](http://www.mydevil.net/pp/C5MEX6HEKU).
 
 ## Thanks to
 - @juniorjpdj for shouting when I did something stupid

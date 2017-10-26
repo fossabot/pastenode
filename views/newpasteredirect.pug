@@ -9,8 +9,10 @@ html
                     h1.title
                         a(href= appurl)= title
                     h2.subtitle= subtitle
-        h1.title Redirecting...
-        h2.subtitle
-            a(href= url) Click here
+        section.section
+            div.container.is-fluid
+                h1.title Redirecting...
+                h2.subtitle
+                    a(href= url) Click here if nothing happens.
         script.
             window.location.href = "!{url}"
