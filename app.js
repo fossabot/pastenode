@@ -70,7 +70,7 @@ app.get('/paste/:id', function(req, res) {
 		_id: mongodb.ObjectId(req.params.id)
 	};
 	database.collection("nodepaste").findOne(query, function(err, result) {
-		console.log(result);
+		//console.log(result);
 		if (err) {
 			throw err;
 		}
@@ -89,18 +89,17 @@ app.get('/paste/:id', function(req, res) {
 	});
 });
 
-//crashes app.
 app.get('/raw/:id', function(req, res) {
 	var query = {
 		_id: mongodb.ObjectId(req.params.id)
 	};
 	database.collection("nodepaste").findOne(query, function(err, result) {
-		console.log(result);
+		//console.log(result);
 		if (err) {
 			throw err;
 		}
 		if (result != null) {
-			res.send(result.content); //todo: send it as text, not html
+			res.type('text/plain; charset=utf-8').send(result.content);
 		}
 		else {
 			res.render('404');
