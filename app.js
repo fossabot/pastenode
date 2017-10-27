@@ -98,7 +98,6 @@ app.get('/raw/:id', function(req, res) {
 		_id: mongodb.ObjectId(req.params.id)
 	};
 	database.collection("nodepaste").findOne(query, function(err, result) {
-		//console.log(result);
 		if (err) {
 			throw err;
 		}
@@ -141,7 +140,7 @@ app.post('/add', function(req, res) {
 		throw "Paste content length is higher than 250000.";
 	}
 	if(paste.delete_password.length > 32){
-		throw "Paste delete password length is higher than 32."
+		throw "Paste delete password length is higher than 32.";
 	}
 	recaptcha.validateRequest(req).then(function() {
 			database.collection("nodepaste").insertOne(paste, function(err, respond) {
@@ -158,6 +157,25 @@ app.post('/add', function(req, res) {
 });
 
 app.post("/delete", function(req, res){
+	//throw "Not implemented yet.";
+	var query = {
+		_id: mongodb.ObjectId(req.body.id),
+		delete_password: req.body.delete_password
+	};
+	console.log(query);
+	if(query._id == ''){
+		throw "Paste ID is empty.";
+	}
+	if(query.delete_password == ''){
+		throw "Delete password is empty.";
+	}
+	if(query.delete_password.length > 32){
+		throw "Delete password length is higher than 32.";
+	}
+	throw "Not implemented yet.";
+});
+
+app.get("/embed/:id", function(req, res){
 	throw "Not implemented yet.";
 });
 

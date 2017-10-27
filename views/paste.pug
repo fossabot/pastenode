@@ -8,14 +8,21 @@ html
         link(rel='stylesheet' href='/app/public/css/paste.css')
         link(rel='stylesheet' href='/app/public/css/prism-bulma-fix.css')
     body
-        div.modal
+        div.modal#delete-modal
             div.modal-background
             div.modal-card
                 header.modal-card-head
                     p.modal-card-title= paste_delete_confirm
-                    button.delete(aria-label="close")
+                    button.delete#delete-modal-close(aria-label="close")
                 section.modal-card-body
                     p= paste_delete_password
+                    form(method="post" action="/delete")
+                        input(type="hidden" name="id" value= pasteid)
+                        div.field.has-addons
+                            div.control
+                                input.input(type="text" name="delete_password")
+                            div.control
+                                button.button.is-danger(type="submit")= paste_delete
         section.hero.is-info
             div.hero-body
                 div.container.is-fluid
@@ -30,5 +37,12 @@ html
                 br
                 a(href= appurl + "raw/" + pasteid)
                     button.button.is-primary= paste_raw
-                button.button.is-danger= paste_delete
+                button.button.is-danger#delete-btn= paste_delete
         script(src='/app/public/js/prism.js')
+        script.
+            document.getElementById("delete-btn").onclick = function(){
+                document.getElementById("delete-modal").classList.add("is-active");
+            }
+            document.getElementById("delete-modal-close").onclick = function(){
+                document.getElementById("delete-modal").classList.remove("is-active")    
+            }
