@@ -8,8 +8,8 @@ const fs = require('fs');
 
 //config
 try {
+	//todo: load example config and change some items with items from config.yml
 	var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
-	console.log(config);
 }
 catch (e) {
 	console.log(e);
@@ -57,6 +57,7 @@ app.get('/', function(req, res) {
 		index_new_paste: config['language']['index_new_paste'],
 		index_name: config['language']['index_name'],
 		index_syntax: config['language']['index_syntax'],
+		index_delete_password: config['language']['index_delete_password'],
 		index_content: config['language']['index_content'],
 		index_captcha: config['language']['index_captcha'],
 		index_add: config['language']['index_add'],
@@ -80,7 +81,10 @@ app.get('/paste/:id', function(req, res) {
 				pastetitle: result.name,
 				pastecontent: result.content,
 				pastesyntax: result.syntax,
-				paste_raw: config['language']['paste_raw']
+				paste_raw: config['language']['paste_raw'],
+				paste_delete: config['language']['paste_delete'],
+				paste_delete_confirm: config['language']['paste_delete_confirm'],
+				paste_delete_password: config['language']['paste_delete_password']
 			});
 		}
 		else {
@@ -111,7 +115,8 @@ app.post('/add', function(req, res) {
 	var paste = {
 		name: req.body.name,
 		syntax: req.body.syntax,
-		content: req.body.content
+		content: req.body.content,
+		delete_password: req.body.delete_password
 	};
 	//some verifications
 	if(paste.name == ''){
@@ -135,6 +140,9 @@ app.post('/add', function(req, res) {
 	if(paste.content.length > 250000){
 		throw "Paste content length is higher than 250000.";
 	}
+	if(paste.delete_password.length > 32){
+		throw "Paste delete password length is higher than 32."
+	}
 	recaptcha.validateRequest(req).then(function() {
 			database.collection("nodepaste").insertOne(paste, function(err, respond) {
 				if (err) throw err;
@@ -147,6 +155,10 @@ app.post('/add', function(req, res) {
 		.catch(function(errorCodes) {
 			res.render('error', { error: recaptcha.translateErrors(errorCodes) });
 		});
+});
+
+app.post("/delete", function(req, res){
+	throw "Not implemented yet.";
 });
 
 // 404
