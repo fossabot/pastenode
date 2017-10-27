@@ -8,14 +8,14 @@ html
         link(rel='stylesheet' href='/app/public/css/paste.css')
         link(rel='stylesheet' href='/app/public/css/prism-bulma-fix.css')
     body
-        div.modal.is-active
+        div.modal
             div.modal-background
             div.modal-card
                 header.modal-card-head
                     p.modal-card-title= paste_delete_confirm
                     button.delete(aria-label="close")
                 section.modal-card-body
-                    p paste_delete_password
+                    p= paste_delete_password
         section.hero.is-info
             div.hero-body
                 div.container.is-fluid
