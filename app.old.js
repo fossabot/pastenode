@@ -1,11 +1,14 @@
 //
 // PasteNode - Pastebin-like service written in Node.js
 //
+
+//some node modules
 const yaml = require('js-yaml');
 const fs = require('fs');
 
 //config
 try {
+	//todo: load example config and change some items with items from config.yml
 	var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
 }
 catch (e) {
@@ -46,10 +49,11 @@ app.use(bodyParser.urlencoded({limit: '2mb', extended: true}));
 //locals
 app.locals.appurl = config['app']['url'];
 app.locals.title = config['app']['title'];
+app.locals.subtitle = config['app']['subtitle'];
 
 //index page
 app.get('/', function(req, res) {
-	res.render('page/index', {
+	res.render('index', {
 		index_new_paste: config['language']['index_new_paste'],
 		index_name: config['language']['index_name'],
 		index_syntax: config['language']['index_syntax'],
@@ -62,7 +66,7 @@ app.get('/', function(req, res) {
 });
 
 //paste page
-app.get('/:id', function(req, res) {
+app.get('/paste/:id', function(req, res) {
 	var query = {
 		_id: mongodb.ObjectId(req.params.id)
 	};
@@ -72,7 +76,7 @@ app.get('/:id', function(req, res) {
 			throw err;
 		}
 		if (result != null) {
-			res.render('page/paste', {
+			res.render('paste', {
 				pasteid: result._id,
 				pastetitle: result.name,
 				pastecontent: result.content,
@@ -89,7 +93,7 @@ app.get('/:id', function(req, res) {
 	});
 });
 
-app.get('/:id/raw', function(req, res) {
+app.get('/raw/:id', function(req, res) {
 	var query = {
 		_id: mongodb.ObjectId(req.params.id)
 	};
@@ -148,32 +152,43 @@ app.post('/add', function(req, res) {
 			});
 		})
 		.catch(function(errorCodes) {
-			res.render('error/500', { error: recaptcha.translateErrors(errorCodes) });
+			res.render('error', { error: recaptcha.translateErrors(errorCodes) });
 		});
 });
 
-app.get("/:id/delete", function(req, res){
+app.post("/delete", function(req, res){
+	var query = {
+		_id: mongodb.ObjectId(req.body.id),
+		delete_password: req.body.delete_password
+	};
+	console.log(query);
+	if(query._id == ''){
+		throw "Paste ID is empty.";
+	}
+	if(query.delete_password == ''){
+		throw "Delete password is empty.";
+	}
+	if(query.delete_password.length > 32){
+		throw "Delete password length is higher than 32.";
+	}
 	throw "Not implemented yet.";
 });
 
-app.get("/:id/embed", function(req, res){
+app.get("/embed/:id", function(req, res){
 	throw "Not implemented yet.";
 });
 
 // 404
 app.get('*', function(req, res) {
-	res.render('error/404');
+	res.render('404');
 });
 
 //error handler
 app.use(function(err, req, res, next) {
 	res.status(err.status || 500);
-	res.render('error/500', { error: err });
+	res.render('error', { error: err });
 });
 
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
 
 });
-
-
-

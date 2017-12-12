@@ -1,6 +1,5 @@
 app:
-    title: "PasteNode v0.3"
-    subtitle: "Free and Open Source Paste service!"
+    title: "PasteNode v0.5"
     database: "mongodb://username:password@server:port/database"
     url: "https://artur9010.pl/"
 recaptcha:

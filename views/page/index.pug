@@ -1,0 +1,164 @@
+extends ../includes/layout.pug
+
+block content
+    form
+        div.box
+            div.box-header.with-border
+                h3.box-title New paste
+            div.box-body
+                div.form-group
+                    textarea.form-control(rows="10" placeholder="Paste ur code here")
+        div.box
+            div.box-header.with-border
+                h3.box-title Optional paste settings
+            div.box-body
+                div.form-group
+                    label Syntax highlighting
+                    select.form-control
+                        option(value="none") Plaintext (no syntax)
+                        optgroup(label="Most popular")
+                            option(value="php") PHP
+                            option(value="c") C
+                            option(value="csharp") C#
+                            option(value="cpp") C++
+                            option(value="ruby") Ruby
+                            option(value="css") CSS
+                        optgroup(label="Other")
+                            option(value="properties") .properties
+                            option(value="abap") ABAP
+                            option(value="apl") APL
+                            option(value="aspnet") ASP.NET (C#)
+                            option(value="actionscript") ActionScript
+                            option(value="ada") Ada
+                            option(value="apacheconf") Apache Configuration
+                            option(value="applescript") AppleScript
+                            option(value="arduino") Arduino
+                            option(value="asciidoc") AsciiDoc
+                            option(value="autohotkey") AutoHotkey
+                            option(value="autoit") AutoIt
+                            option(value="basic") BASIC
+                            option(value="bash") Bash
+                            option(value="batch") Batch
+                            option(value="bison") Bison
+                            option(value="brainfuck") Brainfuck
+                            option(value="bro") Bro
+                            option(value="clike") C-like
+                            option(value="css-extras") CSS Extras
+                            option(value="coffeescript") CoffeeScript
+                            option(value="crystal") Crystal
+                            option(value="d") D
+                            option(value="dart") Dart
+                            option(value="diff") Diff
+                            option(value="django") Django/Jinja2
+                            option(value="docker") Docker
+                            option(value="eiffel") Eiffel
+                            option(value="elixir") Elixir
+                            option(value="erlang") Erlang
+                            option(value="fsharp") F#
+                            option(value="fortran") Fortran
+                            option(value="glsl") GLSL
+                            option(value="gherkin") Gherkin
+                            option(value="git") Git
+                            option(value="go") Go
+                            option(value="graphql") GraphQL
+                            option(value="groovy") Groovy
+                            option(value="http") HTTP
+                            option(value="haml") Haml
+                            option(value="handlebars") Handlebars
+                            option(value="haskell") Haskell
+                            option(value="haxe") Haxe
+                            option(value="icon") Icon
+                            option(value="inform7") Inform 7
+                            option(value="ini") Ini
+                            option(value="j") J
+                            option(value="json") JSON
+                            option(value="java") Java
+                            option(value="javascript") JavaScript
+                            option(value="jolie") Jolie
+                            option(value="julia") Julia
+                            option(value="keyman") Keyman
+                            option(value="kotlin") Kotlin
+                            option(value="lolcode") LOLCODE
+                            option(value="latex") LaTeX
+                            option(value="less") Less
+                            option(value="livescript") LiveScript
+                            option(value="lua") Lua
+                            option(value="matlab") MATLAB
+                            option(value="mel") MEL
+                            option(value="makefile") Makefile
+                            option(value="markdown") Markdown
+                            option(value="markup") Markup
+                            option(value="mizar") Mizar
+                            option(value="monkey") Monkey
+                            option(value="n4js") N4JS
+                            option(value="nasm") NASM
+                            option(value="nsis") NSIS
+                            option(value="nim") Nim
+                            option(value="nix") Nix
+                            option(value="ocaml") OCaml
+                            option(value="objectivec") Objective-C
+                            option(value="opencl") OpenCL
+                            option(value="oz") Oz
+                            option(value="parigp") PARI/GP
+                            option(value="php-extras") PHP Extras
+                            option(value="parser") Parser
+                            option(value="pascal") Pascal
+                            option(value="perl") Perl
+                            option(value="powershell") PowerShell
+                            option(value="processing") Processing
+                            option(value="prolog") Prolog
+                            option(value="protobuf") Protocol Buffers
+                            option(value="pug") Pug
+                            option(value="puppet") Puppet
+                            option(value="pure") Pure
+                            option(value="python") Python
+                            option(value="q") Q
+                            option(value="qore") Qore
+                            option(value="r") R
+                            option(value="jsx") React JSX
+                            option(value="reason") Reason
+                            option(value="renpy") Ren'py
+                            option(value="rip") Rip
+                            option(value="roboconf") Roboconf
+                            option(value="rust") Rust
+                            option(value="sas") SAS
+                            option(value="sql") SQL
+                            option(value="sass") Sass (Sass)
+                            option(value="scss") Sass (Scss)
+                            option(value="scala") Scala
+                            option(value="scheme") Scheme
+                            option(value="smalltalk") Smalltalk
+                            option(value="smarty") Smarty
+                            option(value="stylus") Stylus
+                            option(value="swift") Swift
+                            option(value="tcl") Tcl
+                            option(value="textile") Textile
+                            option(value="twig") Twig
+                            option(value="typescript") TypeScript
+                            option(value="vbnet") VB.Net
+                            option(value="vhdl") VHDL
+                            option(value="verilog") Verilog
+                            option(value="wiki") Wiki markup
+                            option(value="xojo") Xojo (REALbasic)
+                            option(value="yaml") YAML
+                            option(value="nginx") nginx
+                            option(value="rest") reST (reStructuredText)
+                            option(value="vim") vim
+                div.form-group
+                    label Removal password (paste not removable if empty)
+                    input.form-control
+        div.box
+            div.box-header.with-border
+                h3.box-title I'm done
+            div.box-body
+                div.g-recaptcha(data-sitekey= recaptcha_site_key data-callback="recaptcha_enable_button")
+                div.form-group
+                    button.btn.btn-primary(type="submit") Create New Paste
+                    
+        
+block sidebar
+    li.header PasteNode
+        li.active
+            a(href="/") Home
+        li
+            a(href="https://github.com/artur9010/PasteNode") Fork on GitHub
