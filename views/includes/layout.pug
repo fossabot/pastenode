@@ -7,14 +7,16 @@ head
     link(rel='stylesheet' href='app/node_modules/admin-lte/dist/css/AdminLTE.min.css')
     link(rel='stylesheet' href='app/node_modules/admin-lte/dist/css/skins/skin-blue.min.css')
     script(src="https://www.google.com/recaptcha/api.js")
+    block head
 body.skin-blue
-    header.main-header
-        a.logo
-            span.logo-lg= title
-    aside.main-sidebar
-        section.sidebar
-            ul.sidebar-menu
-                block sidebar
-    div.content-wrapper
-        section.content.container-fluid
-            block content
+    div.wrapper
+        header.main-header
+            a.logo
+                span.logo-lg= title
+        aside.main-sidebar
+            section.sidebar
+                ul.sidebar-menu
+                    block sidebar
+        div.content-wrapper
+            section.content.container-fluid
+                block content

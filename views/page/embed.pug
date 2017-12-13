@@ -1,0 +1,9 @@
+doctype html
+html
+    head
+        title= 'Embed paste - ' + paste_id
+        link(rel='stylesheet' href='/app/public/css/prism.css')
+        script(src='/app/public/js/prism.js')
+    body
+        pre
+            code.line-numbers(class="language-" + paste_syntax)= paste_content

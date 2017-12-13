@@ -50,13 +50,6 @@ app.locals.title = config['app']['title'];
 //index page
 app.get('/', function(req, res) {
 	res.render('page/index', {
-		index_new_paste: config['language']['index_new_paste'],
-		index_name: config['language']['index_name'],
-		index_syntax: config['language']['index_syntax'],
-		index_delete_password: config['language']['index_delete_password'],
-		index_content: config['language']['index_content'],
-		index_captcha: config['language']['index_captcha'],
-		index_add: config['language']['index_add'],
 		recaptcha_site_key: config['recaptcha']['site_key']
 	});
 });
@@ -73,18 +66,13 @@ app.get('/:id', function(req, res) {
 		}
 		if (result != null) {
 			res.render('page/paste', {
-				pasteid: result._id,
-				pastetitle: result.name,
-				pastecontent: result.content,
-				pastesyntax: result.syntax,
-				paste_raw: config['language']['paste_raw'],
-				paste_delete: config['language']['paste_delete'],
-				paste_delete_confirm: config['language']['paste_delete_confirm'],
-				paste_delete_password: config['language']['paste_delete_password']
+				paste_id: result._id,
+				paste_content: result.content,
+				paste_syntax: result.syntax
 			});
 		}
 		else {
-			res.render('404');
+			res.render('error/404');
 		}
 	});
 });
@@ -101,7 +89,7 @@ app.get('/:id/raw', function(req, res) {
 			res.type('text/plain; charset=utf-8').send(result.content);
 		}
 		else {
-			res.render('404');
+			res.render('error/404');
 		}
 	});
 });
@@ -114,15 +102,6 @@ app.post('/add', function(req, res) {
 		delete_password: req.body.delete_password
 	};
 	//some verifications
-	if(paste.name == ''){
-		throw "Paste title is empty";
-	}
-	if(paste.name.length < 3){
-		throw "Paste title length is smaller than 3.";
-	}
-	if(paste.name.length > 250){
-		throw "Paste title length is higher than 250.";
-	}
 	if(paste.syntax == ''){
 		throw "Paste syntax is empty";
 	}
@@ -135,16 +114,19 @@ app.post('/add', function(req, res) {
 	if(paste.content.length > 250000){
 		throw "Paste content length is higher than 250000.";
 	}
-	if(paste.delete_password.length > 32){
-		throw "Paste delete password length is higher than 32.";
+	if(paste.delete_password.length > 128){
+		throw "Paste delete password length is higher than 128.";
 	}
 	recaptcha.validateRequest(req).then(function() {
 			database.collection("nodepaste").insertOne(paste, function(err, respond) {
 				if (err) throw err;
 				var id = respond.ops[0]._id;
 				console.log("Paste with id " + id + " added.");
-				res.set('Location', config['app']['url'] + "paste/" + id);
-				res.render('newpasteredirect', { url: config['app']['url'] + "paste/" + id });
+				//res.set('Location', config['app']['url'] + "paste/" + id);
+				//res.render('newpasteredirect', { url: config['app']['url'] + "paste/" + id });
+				res.location('/' + id);
+				res.send("Redirecting...");
+				res.end();
 			});
 		})
 		.catch(function(errorCodes) {
@@ -157,7 +139,25 @@ app.get("/:id/delete", function(req, res){
 });
 
 app.get("/:id/embed", function(req, res){
-	throw "Not implemented yet.";
+	var query = {
+		_id: mongodb.ObjectId(req.params.id)
+	};
+	database.collection("nodepaste").findOne(query, function(err, result) {
+		//console.log(result);
+		if (err) {
+			throw err;
+		}
+		if (result != null) {
+			res.render('page/embed', {
+				paste_id: result._id,
+				paste_content: result.content,
+				paste_syntax: result.syntax
+			});
+		}
+		else {
+			res.render('error/404');
+		}
+	});
 });
 
 // 404
@@ -174,6 +174,3 @@ app.use(function(err, req, res, next) {
 app.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function() {
 
 });
-
-
-

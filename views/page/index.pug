@@ -1,20 +1,20 @@
 extends ../includes/layout.pug
 
 block content
-    form
+    form(action="/add" method="post")
         div.box
             div.box-header.with-border
                 h3.box-title New paste
             div.box-body
                 div.form-group
-                    textarea.form-control(rows="10" placeholder="Paste ur code here")
+                    textarea.form-control(rows="10" placeholder="Paste ur code here" name="content" maxlength="250000" required)
         div.box
             div.box-header.with-border
                 h3.box-title Optional paste settings
             div.box-body
                 div.form-group
                     label Syntax highlighting
-                    select.form-control
+                    select.form-control(name="syntax" required)
                         option(value="none") Plaintext (no syntax)
                         optgroup(label="Most popular")
                             option(value="php") PHP
@@ -146,7 +146,7 @@ block content
                             option(value="vim") vim
                 div.form-group
                     label Removal password (paste not removable if empty)
-                    input.form-control
+                    input.form-control(name="delete_password")
         div.box
             div.box-header.with-border
                 h3.box-title I'm done

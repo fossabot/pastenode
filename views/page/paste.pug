@@ -1,8 +1,13 @@
 extends ../includes/layout.pug
 
+block head
+    link(rel='stylesheet' href='/app/public/css/prism.css')
+    script(src='/app/public/js/prism.js')
+
 block content
-    form
-        textarea(width="100%" height="100%")
+    h2= 'Paste #' + paste_id
+    pre
+        code.line-numbers(class="language-" + paste_syntax)= paste_content
         
 block sidebar
     li.header PasteNode
@@ -14,8 +19,8 @@ block sidebar
         li.active
             a(href="#") View paste
         li
-            a(href="/") Embed
+            a(href="#") Embed
         li
-            a(href="/") Raw
+            a(href= appurl + paste_id + "/raw") Raw
         li
-            a(href="/") Delete
+            a(href="#") Delete

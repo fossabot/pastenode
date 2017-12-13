@@ -2,19 +2,6 @@ app:
     title: "PasteNode v0.5"
     database: "mongodb://username:password@server:port/database"
     url: "https://artur9010.pl/"
-recaptcha:
-    site_key: ""
-    secret_key: ""
-language:
-    index_add: "Add"
-    index_new_paste: "New paste"
-    index_name: "Name"
-    index_syntax: "Syntax"
-    index_delete_password: "Delete password"
-    index_content: "Paste content"
-    index_captcha: "Captcha"
-    paste_raw: "Raw"
-    paste_delete: "Delete"
-    paste_delete_confirm: "Are you really want to delete this paste?"
-    paste_delete_password: "Please enter delete password below:"
-    paste_delete_confirm_button: "DELETE"
+recaptcha: #developer keys, captcha testing mode (no protection)
+    site_key: "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+    secret_key: "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe"
