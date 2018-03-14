@@ -17,10 +17,10 @@ catch (e) {
 const mongodb = require('mongodb');
 var database;
 var databaseUrl = config['app']['database'];
-if(process.env.MONGODB_URI){
+if(process.env.MONGODB_URI){ //heroku :D
 	databaseUrl = process.env.MONGODB_URI;
 }
-mongodb.MongoClient.connect(config['app']['database'], function(err, db) {
+mongodb.MongoClient.connect(databaseUrl, function(err, db) {
 	if (err) throw err;
 	database = db;
 	db.createCollection("nodepaste", function(err, res) {
