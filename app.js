@@ -9,12 +9,17 @@ try {
 	var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml', 'utf8'));
 }
 catch (e) {
+	var config = yaml.safeLoad(fs.readFileSync(__dirname + '/config.yml.example', 'utf8')); //fallback?
 	console.log(e);
 }
 
 //mongodb
 const mongodb = require('mongodb');
 var database;
+var databaseUrl = config['app']['database'];
+if(process.env.MONGODB_URI){
+	databaseUrl = process.env.MONGODB_URI;
+}
 mongodb.MongoClient.connect(config['app']['database'], function(err, db) {
 	if (err) throw err;
 	database = db;
