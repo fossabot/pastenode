@@ -5,6 +5,9 @@
   "main": "app.js",
   "repository": "https://github.com/artur9010/pastenode",
   "author": "Artur Motyka <artur@motyka.pro>",
+  "scripts": {
+    "start": "node app.js"
+  },
   "dependencies": {
     "admin-lte": "^2.4.2",
     "body-parser": "^1.18.2",
