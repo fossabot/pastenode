@@ -1,4 +1,6 @@
 # PasteNode
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fartur9010%2Fpastenode.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fartur9010%2Fpastenode?ref=badge_shield)
+
 ## Free and open source pastebin-like service written in Node.js with Expressjs and MongoDB!
 
 ## Requirements:
@@ -24,3 +26,7 @@ If you are a Polish user, you can use mydevil.net (reflink: http://www.mydevil.n
 ## Thanks to
 - @juniorjpdj for shouting when I did something stupid
 - @PrismJS for great syntax highlighting script!
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fartur9010%2Fpastenode.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fartur9010%2Fpastenode?ref=badge_large)
